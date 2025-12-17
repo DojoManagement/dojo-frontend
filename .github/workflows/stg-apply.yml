@@ -24,11 +24,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
-        working-directory: dojo-frontend
         run: npm ci
 
       - name: Build
-        working-directory: dojo-frontend
         run: npm run build
         env:
           NODE_ENV: production
@@ -43,7 +41,6 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Deploy to S3
-        working-directory: dojo-frontend
         run: |
           aws s3 sync dist/ s3://dojo-frontend-stg --delete \
             --cache-control "public, max-age=31536000" \
