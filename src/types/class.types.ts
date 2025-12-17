@@ -1,0 +1,14 @@
+export interface Class {
+  id: number;
+  name: string;
+  description: string;
+  instructor: string;
+  day_of_week: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+  start_time: string;
+  end_time: string;
+  max_students: number;
+  current_students: number;
+  is_active: boolean;
+}
+
+export type CreateClassDTO = Omit<Class, 'id' | 'current_students'>;

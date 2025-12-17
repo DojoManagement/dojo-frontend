@@ -1,0 +1,12 @@
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnpm-debug.log*
+dist/
+dist-ssr/
+*.local
+build/
+out/
+.vite/
+.cache/
