@@ -22,12 +22,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: npm run build -- --mode staging
         env:
           NODE_ENV: production
           VITE_API_BASE_URL: ${{ secrets.API_BASE_URL_STG }}
