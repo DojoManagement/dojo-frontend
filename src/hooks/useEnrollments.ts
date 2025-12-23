@@ -1,7 +1,6 @@
 // src/hooks/useEnrollments.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { enrollmentsApi } from '../api/enrollments.api';
-import { CreateEnrollmentDTO } from '../types/enrollment.types';
 
 export const useEnrollments = (filters?: { athlete_id?: number; class_id?: number }) => {
   const queryClient = useQueryClient();

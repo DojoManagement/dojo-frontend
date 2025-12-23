@@ -1,7 +1,6 @@
 // src/hooks/useAttendances.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { attendancesApi } from '../api/attendances.api';
-import { CreateAttendanceDTO } from '../types/attendance.types';
 
 export const useAttendances = (filters?: { athlete_id?: number; class_id?: number }) => {
   const queryClient = useQueryClient();

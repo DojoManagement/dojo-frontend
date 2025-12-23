@@ -12,3 +12,7 @@ export interface Class {
 }
 
 export type CreateClassDTO = Omit<Class, 'id' | 'current_students'>;
+
+export interface UpdateClassDTO extends Partial<CreateClassDTO> {
+  id: number;
+}

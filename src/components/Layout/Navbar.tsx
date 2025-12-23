@@ -4,7 +4,6 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  Box,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SportsKabaddiIcon from '@mui/icons-material/SportsKabaddi';

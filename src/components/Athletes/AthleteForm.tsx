@@ -1,10 +1,8 @@
-// src/components/Athletes/AthleteForm.tsx
 import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
-  Box,
   Button,
   TextField,
   Grid,
@@ -16,44 +14,38 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
-import { Athlete } from '../../types/athlete.types';
+import dayjs, { Dayjs } from 'dayjs';
+import { Athlete, CreateAthleteDTO } from '../../types/athlete.types';
 import { useAthletes } from '../../hooks/useAthletes';
 import { useSnackbar } from 'notistack';
 
+// ========================================
+// SCHEMA DE VALIDAÇÃO
+// ========================================
 const athleteSchema = z.object({
   name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
   cpf: z.string().length(11, 'CPF deve ter 11 dígitos'),
   rg: z.string().min(5, 'RG inválido'),
   email: z.string().email('Email inválido'),
-  date_of_birth: z.string(),
+  date_of_birth: z.string().min(1, 'Data de nascimento é obrigatória'),
   street: z.string().min(3, 'Rua é obrigatória'),
   number: z.string().min(1, 'Número é obrigatório'),
-  complement: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-//  complement: z.string().optional(),
+  complement: z.string().optional().default(''),
   neighborhood: z.string().min(3, 'Bairro é obrigatório'),
   city: z.string().min(3, 'Cidade é obrigatória'),
   state: z.string().length(2, 'Estado deve ter 2 letras'),
   zip_code: z.string().length(8, 'CEP deve ter 8 dígitos'),
-  phone: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-//  phone: z.string().optional(),
+  phone: z.string().optional().default(''),
   cellphone: z.string().min(10, 'Celular inválido'),
-  father_name: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-  mother_name: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-  guardians_cpf: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-  guardians_rg: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-//  father_name: z.string().optional(),
-//  mother_name: z.string().optional(),
-//  guardians_cpf: z.string().optional(),
-//  guardians_rg: z.string().optional(),
-  subscription_date: z.string(),
-  anaj_date: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-  blood_type: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-  last_medical_exam: z.string().optional().or(z.literal('')), // ✅ OPCIONAL
-//  anaj_date: z.string().optional(),
-//  blood_type: z.string().optional(),
-//  last_medical_exam: z.string().optional(),
-  current_belt_id: z.string(),
+  father_name: z.string().optional().default(''),
+  mother_name: z.string().optional().default(''),
+  guardians_cpf: z.string().optional().default(''),
+  guardians_rg: z.string().optional().default(''),
+  subscription_date: z.string().min(1, 'Data de inscrição é obrigatória'),
+  anaj_date: z.string().optional().default(''),
+  blood_type: z.string().optional().default(''),
+  last_medical_exam: z.string().optional().default(''),
+  current_belt_id: z.number().int().positive('Faixa é obrigatória'),
 });
 
 type AthleteFormData = z.infer<typeof athleteSchema>;
@@ -81,7 +73,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
     formState: { errors },
   } = useForm<AthleteFormData>({
     resolver: zodResolver(athleteSchema),
-    defaultValues: athlete || {
+    defaultValues: {
       name: '',
       cpf: '',
       rg: '',
@@ -92,7 +84,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
       complement: '',
       neighborhood: '',
       city: '',
-      state: '',
+      state: 'SP',
       zip_code: '',
       phone: '',
       cellphone: '',
@@ -100,51 +92,64 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
       mother_name: '',
       guardians_cpf: '',
       guardians_rg: '',
-      subscription_date: new Date().toISOString().split('T')[0],
+      subscription_date: dayjs().format('YYYY-MM-DD'),
       anaj_date: '',
       blood_type: '',
       last_medical_exam: '',
-      current_belt_id: '1',
+      current_belt_id: 1,
     },
   });
 
   useEffect(() => {
     if (athlete) {
-      reset(athlete);
+      reset({
+        ...athlete,
+        current_belt_id: athlete.current_belt_id,
+      });
     }
   }, [athlete, reset]);
 
-  const onSubmit = (data: AthleteFormData) => {
+  const onSubmit = async (data: AthleteFormData) => {
     try {
-      // ✅ ENVIA TODOS OS CAMPOS, mesmo os vazios (como "" no curl)
-      const payload = {
-        ...data,
-        // Garante que campos opcionais sejam string vazia se não preenchidos
+      const payload: CreateAthleteDTO = {
+        name: data.name,
+        cpf: data.cpf,
+        rg: data.rg,
+        email: data.email,
+        date_of_birth: data.date_of_birth,
+        street: data.street,
+        number: data.number,
         complement: data.complement || '',
+        neighborhood: data.neighborhood,
+        city: data.city,
+        state: data.state,
+        zip_code: data.zip_code,
         phone: data.phone || '',
+        cellphone: data.cellphone,
         father_name: data.father_name || '',
         mother_name: data.mother_name || '',
         guardians_cpf: data.guardians_cpf || '',
         guardians_rg: data.guardians_rg || '',
+        subscription_date: data.subscription_date,
         anaj_date: data.anaj_date || '',
         blood_type: data.blood_type || '',
         last_medical_exam: data.last_medical_exam || '',
+        current_belt_id: data.current_belt_id,
       };
 
-      console.log('📤 Enviando payload completo:', JSON.stringify(payload, null, 2));
+      console.log('📤 Payload:', JSON.stringify(payload, null, 2));
 
       if (athlete) {
-        // ✅ Edição: mantém o ID
-        updateAthlete({ 
-          id: athlete.id, 
-          data: { ...payload, id: athlete.id } as Athlete
+        await updateAthlete.mutateAsync({
+          id: athlete.id,
+          data: payload,
         });
         enqueueSnackbar('Atleta atualizado com sucesso!', { variant: 'success' });
       } else {
-        // ✅ Criação: NÃO envia ID (será gerado pelo backend)
-        createAthlete(payload as Omit<Athlete, 'id'>);
+        await createAthlete.mutateAsync(payload);
         enqueueSnackbar('Atleta criado com sucesso!', { variant: 'success' });
       }
+      
       onClose();
     } catch (error) {
       console.error('❌ Erro ao salvar atleta:', error);
@@ -161,7 +166,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
 
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            {/* Dados Pessoais */}
+            {/* Nome */}
             <Grid item xs={12}>
               <Controller
                 name="name"
@@ -179,6 +184,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
               />
             </Grid>
 
+            {/* CPF e RG */}
             <Grid item xs={12} sm={6}>
               <Controller
                 name="cpf"
@@ -214,6 +220,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
               />
             </Grid>
 
+            {/* Email e Data de Nascimento */}
             <Grid item xs={12} sm={6}>
               <Controller
                 name="email"
@@ -240,7 +247,9 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                   <DatePicker
                     label="Data de Nascimento"
                     value={field.value ? dayjs(field.value) : null}
-                    onChange={(date) => field.onChange(date?.format('YYYY-MM-DD'))}
+                    onChange={(date: Dayjs | null) => 
+                      field.onChange(date ? date.format('YYYY-MM-DD') : '')
+                    }
                     slotProps={{
                       textField: {
                         fullWidth: true,
@@ -295,7 +304,8 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 control={control}
                 render={({ field }) => (
                   <TextField 
-                    {...field} 
+                    {...field}
+                    value={field.value || ''}
                     label="Complemento" 
                     fullWidth 
                     placeholder="Opcional"
@@ -387,7 +397,8 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 control={control}
                 render={({ field }) => (
                   <TextField 
-                    {...field} 
+                    {...field}
+                    value={field.value || ''}
                     label="Telefone" 
                     fullWidth 
                     placeholder="Opcional"
@@ -420,7 +431,8 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 control={control}
                 render={({ field }) => (
                   <TextField 
-                    {...field} 
+                    {...field}
+                    value={field.value || ''}
                     label="Nome do Pai" 
                     fullWidth 
                     placeholder="Opcional"
@@ -435,7 +447,8 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 control={control}
                 render={({ field }) => (
                   <TextField 
-                    {...field} 
+                    {...field}
+                    value={field.value || ''}
                     label="Nome da Mãe" 
                     fullWidth 
                     placeholder="Opcional"
@@ -450,7 +463,8 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 control={control}
                 render={({ field }) => (
                   <TextField 
-                    {...field} 
+                    {...field}
+                    value={field.value || ''}
                     label="CPF do Responsável" 
                     fullWidth 
                     placeholder="Opcional"
@@ -465,7 +479,8 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 control={control}
                 render={({ field }) => (
                   <TextField 
-                    {...field} 
+                    {...field}
+                    value={field.value || ''}
                     label="RG do Responsável" 
                     fullWidth 
                     placeholder="Opcional"
@@ -483,11 +498,15 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                   <DatePicker
                     label="Data de Inscrição"
                     value={field.value ? dayjs(field.value) : null}
-                    onChange={(date) => field.onChange(date?.format('YYYY-MM-DD'))}
+                    onChange={(date: Dayjs | null) => 
+                      field.onChange(date ? date.format('YYYY-MM-DD') : '')
+                    }
                     slotProps={{
                       textField: { 
                         fullWidth: true,
                         required: true,
+                        error: !!errors.subscription_date,
+                        helperText: errors.subscription_date?.message,
                       },
                     }}
                   />
@@ -502,9 +521,11 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Faixa Atual"
+                    label="Faixa Atual (ID)"
+                    type="number"
                     fullWidth
                     required
+                    onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
                     error={!!errors.current_belt_id}
                     helperText={errors.current_belt_id?.message}
                   />
@@ -518,11 +539,11 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 control={control}
                 render={({ field }) => (
                   <TextField 
-                    {...field} 
+                    {...field}
+                    value={field.value || ''}
                     select 
                     label="Tipo Sanguíneo" 
                     fullWidth
-                    placeholder="Opcional"
                   >
                     <MenuItem value="">Não informado</MenuItem>
                     {bloodTypes.map((type) => (
@@ -543,7 +564,9 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                   <DatePicker
                     label="Data ANAJ (Opcional)"
                     value={field.value ? dayjs(field.value) : null}
-                    onChange={(date) => field.onChange(date?.format('YYYY-MM-DD') || '')}
+                    onChange={(date: Dayjs | null) => 
+                      field.onChange(date ? date.format('YYYY-MM-DD') : '')
+                    }
                     slotProps={{
                       textField: { fullWidth: true },
                     }}
@@ -560,7 +583,9 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                   <DatePicker
                     label="Último Exame Médico (Opcional)"
                     value={field.value ? dayjs(field.value) : null}
-                    onChange={(date) => field.onChange(date?.format('YYYY-MM-DD') || '')}
+                    onChange={(date: Dayjs | null) => 
+                      field.onChange(date ? date.format('YYYY-MM-DD') : '')
+                    }
                     slotProps={{
                       textField: { fullWidth: true },
                     }}

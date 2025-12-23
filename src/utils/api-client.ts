@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4566';
+const API_ID = import.meta.env.VITE_API_ID || 'aabbccddee';
 const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT || '10000');
 
 
@@ -19,7 +20,7 @@ if (!API_ID) {
 
 export const apiClient: AxiosInstance = axios.create({
   baseURL: `${API_BASE_URL}/restapis/${API_ID}/dev/_user_request_`,
-  timeout: import.meta.env.VITE_API_TIMEOUT || 30000,
+  timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -53,3 +54,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export default apiClient;

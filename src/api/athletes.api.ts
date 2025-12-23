@@ -20,7 +20,7 @@ export const athletesApi = {
     return response.data;
   },
 
-  update: async (id: number, data: Athlete): Promise<Athlete> => {
+  update: async (id: number, data: UpdateAthleteDTO): Promise<Athlete> => {
     // ✅ Envia ID na atualização
     console.log('📤 Atualizando atleta:', id, data);
     const response = await apiClient.put<Athlete>(`/athletes/${id}`, data);

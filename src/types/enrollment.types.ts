@@ -9,3 +9,7 @@ export interface Enrollment {
 }
 
 export type CreateEnrollmentDTO = Omit<Enrollment, 'id'>;
+
+export interface UpdateEnrollmentDTO extends Partial<CreateEnrollmentDTO> {
+  id: number;
+}

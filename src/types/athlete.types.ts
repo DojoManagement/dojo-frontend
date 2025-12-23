@@ -6,24 +6,51 @@ export interface Athlete {
   email: string;
   date_of_birth: string;
   street: string;
-  number: string;
-  complement?: string;
+  number: number;
+  complement: string;
   neighborhood: string;
   city: string;
   state: string;
   zip_code: string;
-  phone?: string;
+  phone: string;
   cellphone: string;
-  father_name?: string;
-  mother_name?: string;
-  guardians_cpf?: string;
-  guardians_rg?: string;
+  father_name: string;
+  mother_name: string;
+  guardians_cpf: string;
+  guardians_rg: string;
   subscription_date: string;
-  anaj_date?: string;
-  blood_type?: string;
-  last_medical_exam?: string;
-  current_belt_id: string;
+  anaj_date: string;
+  blood_type: string;
+  last_medical_exam: string;
+  current_belt_id: number;
 }
 
-// ✅ CreateAthleteDTO NÃO tem ID
-export type CreateAthleteDTO = Omit<Athlete, 'id'>;
+export interface CreateAthleteDTO {
+  name: string;
+  cpf: string;
+  rg: string;
+  email: string;
+  date_of_birth: string;
+  street: string;
+  number: number;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  phone: string;
+  cellphone: string;
+  father_name: string;
+  mother_name: string;
+  guardians_cpf: string;
+  guardians_rg: string;
+  subscription_date: string;
+  anaj_date: string;
+  blood_type: string;
+  last_medical_exam: string;
+  current_belt_id: number;
+}
+
+export interface UpdateAthleteDTO extends Partial<CreateAthleteDTO> {
+  id: number;
+}
