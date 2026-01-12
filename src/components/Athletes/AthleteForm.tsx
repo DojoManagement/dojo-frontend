@@ -26,7 +26,7 @@ const athleteSchema = z.object({
   email: z.string().email('Email inválido'),
   date_of_birth: z.string().min(1, 'Data de nascimento é obrigatória'),
   street: z.string().min(3, 'Rua é obrigatória'),
-  number: z.number().int().positive('Número é obrigatório'),
+  number: z.string().default(''),
   complement: z.string().optional().default(''),
   neighborhood: z.string().min(3, 'Bairro é obrigatório'),
   city: z.string().min(3, 'Cidade é obrigatória'),
@@ -77,7 +77,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
       email: '',
       date_of_birth: '',
       street: '',
-      number: 0,
+      number: '',
       complement: '',
       neighborhood: '',
       city: '',
@@ -288,7 +288,6 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    value={field.value || ''}
                     label="Número"
                     fullWidth
                     required

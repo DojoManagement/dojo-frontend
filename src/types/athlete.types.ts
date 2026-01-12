@@ -6,7 +6,7 @@ export interface Athlete {
   email: string;
   date_of_birth: string;
   street: string;
-  number: number;
+  number: string;
   complement: string;
   neighborhood: string;
   city: string;
@@ -32,7 +32,7 @@ export interface CreateAthleteDTO {
   email: string;
   date_of_birth: string;
   street: string;
-  number: number;
+  number: string;
   complement: string;
   neighborhood: string;
   city: string;
