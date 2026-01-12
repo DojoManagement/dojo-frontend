@@ -77,7 +77,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
       email: '',
       date_of_birth: '',
       street: '',
-      number: '',
+      number: 0,
       complement: '',
       neighborhood: '',
       city: '',
