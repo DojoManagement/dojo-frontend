@@ -21,9 +21,11 @@ import { useEnrollments } from '../../hooks/useEnrollments';
 import { useAthletes } from '../../hooks/useAthletes';
 import { useClasses } from '../../hooks/useClasses';
 import { useSnackbar } from 'notistack';
+import { CreateEnrollmentDTO } from '../../types/enrollment.types';
 
 const enrollmentSchema = z.object({
   athlete_id: z.number().min(1, 'Atleta é obrigatório'),
+  athlete_name: z.string(),
   class_id: z.number().min(1, 'Aula é obrigatória'),
   enrollment_date: z.string(),
   is_active: z.boolean(),
@@ -49,18 +51,36 @@ export default function EnrollmentForm({ onClose }: EnrollmentFormProps) {
   } = useForm<EnrollmentFormData>({
     resolver: zodResolver(enrollmentSchema),
     defaultValues: {
-      enrollment_date: new Date().toISOString().split('T')[0],
+      athlete_id: 0,
+      athlete_name: '',
+      class_id: 0,
+      enrollment_date: dayjs().format('YYYY-MM-DD'),
       is_active: true,
       notes: '',
     },
   });
 
-  const onSubmit = (data: EnrollmentFormData) => {
+  const onSubmit = async (data: EnrollmentFormData) => {
     try {
-      createEnrollment(data);
+      // ✅ Criar payload conforme CreateEnrollmentDTO
+      const payload: CreateEnrollmentDTO = {
+        athlete_id: data.athlete_id,
+        athlete_name: data.athlete_name,
+        class_id: data.class_id,
+        enrollment_date: data.enrollment_date,
+        is_active: data.is_active,
+        notes: data.notes || '',
+      };
+
+      console.log('📤 Payload:', JSON.stringify(payload, null, 2));
+
+      // ✅ Usar mutateAsync
+      await createEnrollment.mutateAsync(payload);
+      
       enqueueSnackbar('Matrícula criada com sucesso!', { variant: 'success' });
       onClose();
     } catch (error) {
+      console.error('❌ Erro ao criar matrícula:', error);
       enqueueSnackbar('Erro ao criar matrícula', { variant: 'error' });
     }
   };

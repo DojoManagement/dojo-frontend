@@ -19,9 +19,6 @@ import { Athlete, CreateAthleteDTO } from '../../types/athlete.types';
 import { useAthletes } from '../../hooks/useAthletes';
 import { useSnackbar } from 'notistack';
 
-// ========================================
-// SCHEMA DE VALIDAÇÃO
-// ========================================
 const athleteSchema = z.object({
   name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
   cpf: z.string().length(11, 'CPF deve ter 11 dígitos'),
@@ -29,7 +26,7 @@ const athleteSchema = z.object({
   email: z.string().email('Email inválido'),
   date_of_birth: z.string().min(1, 'Data de nascimento é obrigatória'),
   street: z.string().min(3, 'Rua é obrigatória'),
-  number: z.string().min(1, 'Número é obrigatório'),
+  number: z.number().int().positive('Número é obrigatório'),
   complement: z.string().optional().default(''),
   neighborhood: z.string().min(3, 'Bairro é obrigatório'),
   city: z.string().min(3, 'Cidade é obrigatória'),
@@ -84,7 +81,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
       complement: '',
       neighborhood: '',
       city: '',
-      state: 'SP',
+      state: 'SC',
       zip_code: '',
       phone: '',
       cellphone: '',
@@ -142,7 +139,10 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
       if (athlete) {
         await updateAthlete.mutateAsync({
           id: athlete.id,
-          data: payload,
+          data: {
+            ...payload,
+            id: athlete.id,
+          },
         });
         enqueueSnackbar('Atleta atualizado com sucesso!', { variant: 'success' });
       } else {
@@ -288,6 +288,7 @@ export default function AthleteForm({ athlete, onClose }: AthleteFormProps) {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    value={field.value || ''}
                     label="Número"
                     fullWidth
                     required

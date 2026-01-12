@@ -19,7 +19,7 @@ if (!API_ID) {
 }
 
 export const apiClient: AxiosInstance = axios.create({
-  baseURL: `${API_BASE_URL}/restapis/${API_ID}/dev/_user_request_`,
+  baseURL: `${API_BASE_URL}`, //restapis/${API_ID}/stg/_user_request_`,
   timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',

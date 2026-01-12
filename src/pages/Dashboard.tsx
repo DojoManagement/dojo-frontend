@@ -58,8 +58,8 @@ export default function Dashboard() {
   const { enrollments } = useEnrollments();
   const { attendances } = useAttendances();
 
-  const activeEnrollments = enrollments?.filter((e) => e.is_active).length || 0;
-  const activeClasses = classes?.filter((c) => c.is_active).length || 0;
+  const activeEnrollments = (enrollments || []).filter((e) => e.is_active).length || 0;
+  const activeClasses = (classes || []).filter((c) => c.is_active).length || 0;
   const todayAttendances = attendances?.filter(
     (a) => a.attendance_date === new Date().toISOString().split('T')[0]
   ).length || 0;

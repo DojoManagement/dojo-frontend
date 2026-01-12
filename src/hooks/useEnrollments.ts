@@ -1,24 +1,32 @@
-// src/hooks/useEnrollments.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { enrollmentsApi } from '../api/enrollments.api';
+import type { CreateEnrollmentDTO, UpdateEnrollmentDTO } from '../types/enrollment.types';
 
-export const useEnrollments = (filters?: { athlete_id?: number; class_id?: number }) => {
+export function useEnrollments() {
   const queryClient = useQueryClient();
 
   const { data: enrollments, isLoading, error } = useQuery({
-    queryKey: ['enrollments', filters],
-    queryFn: () => enrollmentsApi.getAll(filters),
+    queryKey: ['enrollments'],
+    queryFn: () => enrollmentsApi.getAll(),
   });
 
-  const createMutation = useMutation({
-    mutationFn: enrollmentsApi.create,
+  const createEnrollment = useMutation({
+    mutationFn: (data: CreateEnrollmentDTO) => enrollmentsApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['enrollments'] });
     },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: enrollmentsApi.delete,
+  const updateEnrollment = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: UpdateEnrollmentDTO }) => 
+      enrollmentsApi.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['enrollments'] });
+    },
+  });
+
+  const deleteEnrollment = useMutation({
+    mutationFn: (id: number) => enrollmentsApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['enrollments'] });
     },
@@ -28,7 +36,8 @@ export const useEnrollments = (filters?: { athlete_id?: number; class_id?: numbe
     enrollments,
     isLoading,
     error,
-    createEnrollment: createMutation.mutate,
-    deleteEnrollment: deleteMutation.mutate,
+    createEnrollment,
+    updateEnrollment,
+    deleteEnrollment,
   };
-};
+}

@@ -13,7 +13,6 @@ import {
 import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { Enrollment } from '../../types/enrollment.types';
 import EnrollmentForm from './EnrollmentForm';
 import { useEnrollments } from '../../hooks/useEnrollments';
 import { useAthletes } from '../../hooks/useAthletes';
@@ -29,7 +28,7 @@ export default function EnrollmentList() {
   const [filterClassId, setFilterClassId] = useState<number | ''>('');
 
   // Filtra matrículas
-  const filteredEnrollments = enrollments?.filter((enrollment) => {
+  const filteredEnrollments = (enrollments || []).filter((enrollment) => {
     if (filterAthleteId && enrollment.athlete_id !== filterAthleteId) return false;
     if (filterClassId && enrollment.class_id !== filterClassId) return false;
     return true;
@@ -94,7 +93,7 @@ export default function EnrollmentList() {
           label="Deletar"
           onClick={() => {
             if (confirm('Deseja realmente deletar esta matrícula?')) {
-              deleteEnrollment(params.row.id);
+              deleteEnrollment.mutate(params.row.id);
             }
           }}
         />,

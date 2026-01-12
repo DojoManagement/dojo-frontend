@@ -1,6 +1,6 @@
 // src/api/enrollments.api.ts
 import { apiClient } from '../utils/api-client';
-import { Enrollment, CreateEnrollmentDTO } from '../types/enrollment.types';
+import { Enrollment, CreateEnrollmentDTO, UpdateEnrollmentDTO } from '../types/enrollment.types';
 
 export const enrollmentsApi = {
   getAll: async (filters?: { athlete_id?: number; class_id?: number }): Promise<Enrollment[]> => {
@@ -14,6 +14,11 @@ export const enrollmentsApi = {
 
   create: async (data: CreateEnrollmentDTO): Promise<Enrollment> => {
     const response = await apiClient.post<Enrollment>('/enrollments', data);
+    return response.data;
+  },
+
+  update: async (id: number, data: UpdateEnrollmentDTO): Promise<Enrollment> => {
+    const response = await apiClient.put<Enrollment>(`/enrollments/${id}`, data);
     return response.data;
   },
 

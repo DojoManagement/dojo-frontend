@@ -53,7 +53,7 @@ export default function AthleteList() {
           label="Deletar"
           onClick={() => {
             if (confirm('Deseja realmente deletar este atleta?')) {
-              deleteAthlete(params.row.id);
+              deleteAthlete.mutate(params.row.id);
             }
           }}
         />,

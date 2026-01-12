@@ -13,7 +13,6 @@ import {
 import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { Attendance } from '../../types/attendance.types';
 import AttendanceForm from './AttendanceForm';
 import { useAttendances } from '../../hooks/useAttendances';
 import { useAthletes } from '../../hooks/useAthletes';
