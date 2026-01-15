@@ -29,7 +29,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true }}>
             <Layout>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
