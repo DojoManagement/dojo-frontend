@@ -8,7 +8,7 @@ export const athletesApi = {
     return response.data.items;
   },
 
-  getById: async (id: number): Promise<Athlete> => {
+  getById: async (id: string): Promise<Athlete> => {
     const response = await apiClient.get<Athlete>(`/athletes/${id}`);
     return response.data;
   },
@@ -20,14 +20,14 @@ export const athletesApi = {
     return response.data;
   },
 
-  update: async (id: number, data: UpdateAthleteDTO): Promise<Athlete> => {
+  update: async (id: string, data: UpdateAthleteDTO): Promise<Athlete> => {
     // ✅ Envia ID na atualização
     console.log('📤 Atualizando atleta:', id, data);
     const response = await apiClient.put<Athlete>(`/athletes/${id}`, data);
     return response.data;
   },
 
-  delete: async (id: number): Promise<void> => {
+  delete: async (id: string): Promise<void> => {
     await apiClient.delete(`/athletes/${id}`);
   },
 };

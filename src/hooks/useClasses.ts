@@ -19,7 +19,7 @@ export const useClasses = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: CreateClassDTO & { id: number; current_students: number } }) =>
+    mutationFn: ({ id, data }: { id: string; data: CreateClassDTO & { id: string; current_students: number } }) =>
       classesApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['classes'] });

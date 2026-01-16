@@ -18,7 +18,7 @@ export function useEnrollments() {
   });
 
   const updateEnrollment = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateEnrollmentDTO }) => 
+    mutationFn: ({ id, data }: { id: string; data: UpdateEnrollmentDTO }) => 
       enrollmentsApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['enrollments'] });
@@ -26,7 +26,7 @@ export function useEnrollments() {
   });
 
   const deleteEnrollment = useMutation({
-    mutationFn: (id: number) => enrollmentsApi.delete(id),
+    mutationFn: (id: string) => enrollmentsApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['enrollments'] });
     },

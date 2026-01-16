@@ -24,9 +24,9 @@ import { useSnackbar } from 'notistack';
 import { CreateEnrollmentDTO } from '../../types/enrollment.types';
 
 const enrollmentSchema = z.object({
-  athlete_id: z.number().min(1, 'Atleta é obrigatório'),
+  athlete_id: z.string().min(1, 'Atleta é obrigatório'),
   athlete_name: z.string(),
-  class_id: z.number().min(1, 'Aula é obrigatória'),
+  class_id: z.string().min(1, 'Aula é obrigatória'),
   enrollment_date: z.string(),
   is_active: z.boolean(),
   notes: z.string().optional(),
@@ -51,9 +51,9 @@ export default function EnrollmentForm({ onClose }: EnrollmentFormProps) {
   } = useForm<EnrollmentFormData>({
     resolver: zodResolver(enrollmentSchema),
     defaultValues: {
-      athlete_id: 0,
+      athlete_id: '',
       athlete_name: '',
-      class_id: 0,
+      class_id: '',
       enrollment_date: dayjs().format('YYYY-MM-DD'),
       is_active: true,
       notes: '',

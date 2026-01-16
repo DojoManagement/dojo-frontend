@@ -8,7 +8,7 @@ export const classesApi = {
     return response.data.items;
   },
 
-  getById: async (id: number): Promise<Class> => {
+  getById: async (id: string): Promise<Class> => {
     const response = await apiClient.get<Class>(`/classes/${id}`);
     return response.data;
   },
@@ -18,12 +18,12 @@ export const classesApi = {
     return response.data;
   },
 
-  update: async (id: number, data: CreateClassDTO & { id: number; current_students: number }): Promise<Class> => {
+  update: async (id: string, data: CreateClassDTO & { id: string; current_students: number }): Promise<Class> => {
     const response = await apiClient.put<Class>(`/classes/${id}`, data);
     return response.data;
   },
 
-  delete: async (id: number): Promise<void> => {
+  delete: async (id: string): Promise<void> => {
     await apiClient.delete(`/classes/${id}`);
   },
 };

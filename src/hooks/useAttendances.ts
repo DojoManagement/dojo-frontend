@@ -2,7 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { attendancesApi } from '../api/attendances.api';
 
-export const useAttendances = (filters?: { athlete_id?: number; class_id?: number }) => {
+export const useAttendances = (filters?: { athlete_id?: string; class_id?: string }) => {
   const queryClient = useQueryClient();
 
   const { data: attendances, isLoading, error } = useQuery({

@@ -3,7 +3,7 @@ import { apiClient } from '../utils/api-client';
 import { Attendance, CreateAttendanceDTO } from '../types/attendance.types';
 
 export const attendancesApi = {
-  getAll: async (filters?: { athlete_id?: number; class_id?: number }): Promise<Attendance[]> => {
+  getAll: async (filters?: { athlete_id?: string; class_id?: string }): Promise<Attendance[]> => {
     const params = new URLSearchParams();
     if (filters?.athlete_id) params.append('athlete_id', filters.athlete_id.toString());
     if (filters?.class_id) params.append('class_id', filters.class_id.toString());
@@ -12,7 +12,7 @@ export const attendancesApi = {
     return response.data.items;
   },
 
-  getById: async (id: number): Promise<Attendance> => {
+  getById: async (id: string): Promise<Attendance> => {
     const response = await apiClient.get<Attendance>(`/attendances/${id}`);
     return response.data;
   },
@@ -22,7 +22,7 @@ export const attendancesApi = {
     return response.data;
   },
 
-  delete: async (id: number): Promise<void> => {
+  delete: async (id: string): Promise<void> => {
     await apiClient.delete(`/attendances/${id}`);
   },
 };

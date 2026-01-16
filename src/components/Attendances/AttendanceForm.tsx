@@ -21,8 +21,8 @@ import { useClasses } from '../../hooks/useClasses';
 import { useSnackbar } from 'notistack';
 
 const attendanceSchema = z.object({
-  athlete_id: z.number().min(1, 'Atleta é obrigatório'),
-  class_id: z.number().min(1, 'Aula é obrigatória'),
+  athlete_id: z.string().min(1, 'Atleta é obrigatório'),
+  class_id: z.string().min(1, 'Aula é obrigatória'),
   attendance_date: z.string(),
   status: z.enum(['present', 'absent', 'justified', 'late']),
   notes: z.string().optional(),

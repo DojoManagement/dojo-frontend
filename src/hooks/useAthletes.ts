@@ -18,7 +18,7 @@ export const useAthletes = () => {
   });
 
   const updateAthlete = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateAthleteDTO }) =>
+    mutationFn: ({ id, data }: { id: string; data: UpdateAthleteDTO }) =>
       athletesApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['athletes'] });
@@ -26,7 +26,7 @@ export const useAthletes = () => {
   });
 
   const deleteAthlete = useMutation({
-    mutationFn: (id: number) => athletesApi.delete(id),
+    mutationFn: (id: string) => athletesApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['athletes'] });
     },

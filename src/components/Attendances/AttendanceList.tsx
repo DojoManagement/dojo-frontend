@@ -38,8 +38,8 @@ export default function AttendanceList() {
   const { athletes } = useAthletes();
   const { classes } = useClasses();
   const [openDialog, setOpenDialog] = useState(false);
-  const [filterAthleteId, setFilterAthleteId] = useState<number | ''>('');
-  const [filterClassId, setFilterClassId] = useState<number | ''>('');
+  const [filterAthleteId, setFilterAthleteId] = useState<string>('');
+  const [filterClassId, setFilterClassId] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<string>('');
 
   // Filtra presenças
@@ -141,7 +141,7 @@ export default function AttendanceList() {
           select
           label="Filtrar por Atleta"
           value={filterAthleteId}
-          onChange={(e) => setFilterAthleteId(e.target.value as number | '')}
+          onChange={(e) => setFilterAthleteId(e.target.value)}
           sx={{ minWidth: 200 }}
         >
           <MenuItem value="">Todos</MenuItem>
@@ -156,7 +156,7 @@ export default function AttendanceList() {
           select
           label="Filtrar por Aula"
           value={filterClassId}
-          onChange={(e) => setFilterClassId(e.target.value as number | '')}
+          onChange={(e) => setFilterClassId(e.target.value)}
           sx={{ minWidth: 200 }}
         >
           <MenuItem value="">Todas</MenuItem>
