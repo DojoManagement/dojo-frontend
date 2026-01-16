@@ -1,5 +1,5 @@
 export interface Class {
-  id: number;
+  id: string;  // UUID
   name: string;
   description: string;
   instructor: string;
@@ -23,5 +23,5 @@ export interface CreateClassDTO {
   is_active: boolean;
 }
 export interface UpdateClassDTO extends Partial<CreateClassDTO> {
-  id: number;
+  id: string;  // UUID
 }

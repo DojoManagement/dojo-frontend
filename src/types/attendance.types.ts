@@ -1,7 +1,7 @@
 export interface Attendance {
-  id: number;
-  athlete_id: number;
-  class_id: number;
+  id: string;  // UUID
+  athlete_id: string;  // UUID do atleta
+  class_id: string;  // UUID da classe
   attendance_date: string;
   status: 'present' | 'absent' | 'justified' | 'late';
   notes?: string;

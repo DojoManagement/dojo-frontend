@@ -1,5 +1,5 @@
 export interface Athlete {
-  id: number;
+  id: string;  // UUID agora
   name: string;
   cpf: string;
   rg: string;
@@ -52,5 +52,5 @@ export interface CreateAthleteDTO {
 }
 
 export interface UpdateAthleteDTO extends Partial<CreateAthleteDTO> {
-  id: number;
+  id: string;  // UUID
 }
